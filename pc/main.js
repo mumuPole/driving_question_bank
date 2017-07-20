@@ -6,6 +6,7 @@ import ReactDOM from 'react-dom';
 import { Route, Router, IndexRoute, hashHistory } from 'react-router';
 import App from './components/app';
 import IndexComponent from './components/indexPage/indexPage';
+import './commonLess/common.less';
 
 const main = () => {
     ReactDOM.render((<Router history={hashHistory}>
