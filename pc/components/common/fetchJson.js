@@ -31,7 +31,11 @@ export const handleParams = param => {
 const FetchJsonp = url => {
     const fetchIt = (apiUrl, success, error) => {
         fetchJsonp(apiUrl).then(res => res.json()).then(data => {
-            success(data);
+			if (data.reason === 'ok') {
+				success(data.result);
+			} else {
+				message.error('题目获取失败！');
+			}
         }).catch(e => {
             message.error(e);
             error();
