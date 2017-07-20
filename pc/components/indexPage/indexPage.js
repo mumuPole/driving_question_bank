@@ -18,24 +18,24 @@ export default class IndexComponent extends React.Component {
     }
 
     componentDidMount() {
-        loadQuestion(1, 'c1', 'rand').then(data => {
-            console.log(data);
-        });
+        // loadQuestion(1, 'c1', 'rand').then(data => {
+        //     console.log(data);
+        // });
     }
 
-    setState = (name, value) => {
+    handleState = (name, value) => {
         this.setState({
             [name]: value,
         });
     };
     onChangeSubject = e => {
-        this.setState('subject', e.target.value);
+        this.handleState('subject', e.target.value);
     };
     onChangeModal = e => {
-        this.setState('modal', e.target.value);
+        this.handleState('modal', e.target.value);
     };
     onChangeType = e => {
-		this.setState('type', e.target.value);
+		this.handleState('type', e.target.value);
 	};
 
     render() {
@@ -67,6 +67,7 @@ export default class IndexComponent extends React.Component {
 					<Radio value={'order'}>顺序测试</Radio>
 				</RadioGroup>
 			</div>
+            <button className="startTest blueBtn">开始测试</button>
         </div>);
     }
 }
