@@ -14,6 +14,7 @@ export default class IndexComponent extends React.Component {
             subject: 1,
             modal: 'c1',
 			type: 'rand',
+			time: false,
         };
     }
 
@@ -36,6 +37,9 @@ export default class IndexComponent extends React.Component {
     };
     onChangeType = e => {
 		this.handleState('type', e.target.value);
+	};
+	onChangeTime = e => {
+		this.handleState('time', e.target.value);
 	};
 
     render() {
@@ -67,6 +71,21 @@ export default class IndexComponent extends React.Component {
 					<Radio value={'order'}>顺序测试</Radio>
 				</RadioGroup>
 			</div>
+            <div className="time">
+                <p>是否计时：</p>
+                <RadioGroup onChange={this.onChangeTime} value={this.state.time}>
+                    <Radio value={true}>是</Radio>
+                    <Radio value={false}>否</Radio>
+                </RadioGroup>
+            </div>
+            <div className="message flex_row_start">
+                <div>
+                    说明：
+                </div>
+                <p>
+                    若选择计时答题，每题倒计时15秒，倒计时结束自动判本题答错，进入下一题
+                </p>
+            </div>
             <button className="startTest blueBtn">开始测试</button>
         </div>);
     }
