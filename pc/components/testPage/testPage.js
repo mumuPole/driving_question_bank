@@ -37,37 +37,46 @@ export default class TestPage extends React.Component {
         const questions = this.state.questions;
         let index = this.state.index;
         let score = this.state.score;
+		let time = 5;
+		let timer = null;
+		timer = setInterval(function () {
+			time -= 1;
+			console.log(time);
+		}, 1000);
         if (this.state.choose === questions[index].answer) {
-			let time = 5;
-            const modal = Modal.success({
+			let modal = null;
+			modal = Modal.success({
 				title: '回答正确',
-                content: <div>
-                    <p>{questions[index].explains}</p>
-                    <p>{`倒计时关闭窗口：${setInterval(function () {
-                        time -= 1;
-						console.log(time);
-                        return time;
-					}, 1000)}秒`}</p>
-                </div>,
-				onOk() {},
+				content: <div>
+					<p>{questions[index].explains}</p>
+					<p>{`倒计时关闭窗口：${time}秒`}</p>
+				</div>,
+				onOk() {
+					clearInterval(timer);
+				},
+				onCancel() {
+					clearInterval(timer);
+				}
 			});
-			setTimeout(() => modal.destroy(), 5000);
+
+			setTimeout(() => {modal.destroy(); clearInterval(timer);}, 5000);
             score += 1;
         } else {
-			let time = 5;
-            const modal = Modal.error({
+			let modal = null;
+			modal = Modal.error({
 				title: '回答错误',
 				content: <div>
-                    <p>{questions[index].explains}</p>
-                    <p>{`倒计时关闭窗口：${setInterval(function () {
-						time -= 1;
-						console.log(time);
-						return time;
-					}, 1000)}秒`}</p>
-                </div>,
-				onOk() {},
+					<p>{questions[index].explains}</p>
+					<p>{`倒计时关闭窗口：${time}秒`}</p>
+				</div>,
+				onOk() {
+					clearInterval(timer);
+				},
+				onCancel() {
+					clearInterval(timer);
+				}
 			});
-			setTimeout(() => modal.destroy(), 5000);
+			setTimeout(() => {modal.destroy(); clearInterval(timer);}, 5000);
         }
 		index += 1;
         this.setState({
