@@ -2,9 +2,10 @@
  * Created by panchong on 17/7/20.
  */
 import React from 'react';
-import { Link, hashHistory } from 'react-router';
+import { hashHistory } from 'react-router';
 import { Radio, Modal } from 'antd';
 import { loadQuestion } from '../common/loadQuestion';
+import ChargeModal from './chargeModal';
 import './testPage.less';
 
 const RadioGroup = Radio.Group;
@@ -30,85 +31,49 @@ export default class TestPage extends React.Component {
     }
     onChangeChoose = e => {
     	this.setState({
-            choose: e.target.value,
-        });
+        choose: e.target.value,
+    });
     };
     correctAnswer = () => {
         const questions = this.state.questions;
-        let index = this.state.index;
-        let score = this.state.score;
-		let time = 5;
-		let timer = null;
-		timer = setInterval(function () {
-			time -= 1;
-			console.log(time);
-		}, 1000);
-        if (this.state.choose === questions[index].answer) {
-			let modal = null;
-			modal = Modal.success({
-				title: '回答正确',
-				content: <div>
-					<p>{questions[index].explains}</p>
-					<p>{`倒计时关闭窗口：${time}秒`}</p>
-				</div>,
-				onOk() {
-					clearInterval(timer);
-				},
-				onCancel() {
-					clearInterval(timer);
-				}
-			});
-
-			setTimeout(() => {modal.destroy(); clearInterval(timer);}, 5000);
-            score += 1;
-        } else {
-			let modal = null;
-			modal = Modal.error({
-				title: '回答错误',
-				content: <div>
-					<p>{questions[index].explains}</p>
-					<p>{`倒计时关闭窗口：${time}秒`}</p>
-				</div>,
-				onOk() {
-					clearInterval(timer);
-				},
-				onCancel() {
-					clearInterval(timer);
-				}
-			});
-			setTimeout(() => {modal.destroy(); clearInterval(timer);}, 5000);
-        }
-		index += 1;
-        this.setState({
-			index,
-			choose: '',
-            score,
-        });
+        const index = this.state.index;
+        this.ChargeModal.show(this.state.choose === questions[index].answer, questions[index].explains);
     };
+    handleNext = () => {
+		const questions = this.state.questions;
+		const index = this.state.index;
+		let score = this.state.score;
+		score = this.state.choose === questions[index].answer ? score + 1 : score;
+		this.setState({
+			score,
+			choose: '',
+			index: index + 1,
+		});
+	};
     handleRetest = () => {
         const _this = this;
-		confirm({
-			title: '你确定要重新测试吗?',
-			content: '本次测试成绩将归0',
-			onOk() {
-				_this.setState({
-					index: 0,
-					choose: '',
-					score: 0,
-				});
-			},
-			onCancel() {},
-		});
+        confirm({
+            title: '你确定要重新测试吗?',
+            content: '本次测试成绩将归0',
+            onOk() {
+                _this.setState({
+                    index: 0,
+                    choose: '',
+                    score: 0,
+                });
+            },
+            onCancel() {},
+        });
     };
     goBackIndex = () => {
-		confirm({
-			title: '你确定要返回首页吗?',
-			content: '本次测试成绩将归0',
-			onOk() {
-				hashHistory.push('/');
-			},
-			onCancel() {},
-		});
+        confirm({
+            title: '你确定要返回首页吗?',
+            content: '本次测试成绩将归0',
+            onOk() {
+                hashHistory.push('/');
+            },
+            onCancel() {},
+        });
     };
     render() {
     	const questions = this.state.questions;
@@ -118,13 +83,14 @@ export default class TestPage extends React.Component {
             display: 'block',
         };
         return (<div className="testPage" >
-         <button className="yellowBtn" onClick={this.goBackIndex}>返回首页</button>
+            <button className="yellowBtn" onClick={this.goBackIndex}>返回首页</button>
+			<p>{this.state.score}分</p>
             {
 				questions.length === 0 ? null : <div className="questionItem">
     <p className="questionNo">{`第${index + 1}题`}</p>
-                        <div  className="questionImg">
-                            <img alt="" src={question.url} />
-                        </div>
+    <div className="questionImg">
+        <img alt="" src={question.url} />
+    </div>
     <p className="questionStem">{question.question}</p>
     <RadioGroup onChange={this.onChangeChoose} value={this.state.choose}>
         <Radio style={radioStyle} value="1">{`A.${question.item1}`}</Radio>
@@ -138,6 +104,10 @@ export default class TestPage extends React.Component {
                 <button className="blueBtn" onClick={this.correctAnswer}>下一题</button>
                 <button className="grayBtn" onClick={this.handleRetest}>重新测试</button>
             </div>
+            <ChargeModal
+				onNext={this.handleNext}
+                ref={com => { this.ChargeModal = com; }}
+            />
         </div>);
     }
 }
