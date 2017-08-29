@@ -60,7 +60,7 @@ export default class IndexComponent extends React.Component {
             <div className="time">
                 <p>是否计时：</p>
                 <RadioGroup onChange={args => this.handleState('time', args)} value={this.state.time}>
-                    <Radio value>是</Radio>
+                    <Radio value={true}>是</Radio>
                     <Radio value={false}>否</Radio>
                 </RadioGroup>
             </div>
@@ -80,7 +80,7 @@ export default class IndexComponent extends React.Component {
                     2.科目四不需要选择驾照类型
                 </p>
             </div>
-            <Link to={`${PATH.testPage}/${this.state.type}/${this.state.subject}/${this.state.modal}`}><button className="startTest blueBtn">开始测试</button></Link>
+            <Link to={`${PATH.testPage}/${this.state.type}/${this.state.subject}/${this.state.time}/${this.state.modal}`}><button className="startTest blueBtn">开始测试</button></Link>
         </div>);
     }
 }

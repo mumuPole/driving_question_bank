@@ -1,10 +1,6 @@
 /**
  * Created by panchong on 17/7/17.
  */
-/**
- * Created by panchong on 17/7/5.
- */
-import 'whatwg-fetch';
 import 'es6-promise';
 import { message } from 'antd';
 

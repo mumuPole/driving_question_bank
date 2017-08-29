@@ -18,6 +18,10 @@ export default class TestPage extends React.Component {
             index: 0,
             choose: '',
             score: 0,
+            isTime: false,
+            timer: null,
+            timeout: null,
+            time: 15,
         };
     }
 
@@ -26,30 +30,64 @@ export default class TestPage extends React.Component {
             this.setState({
                 questions: data,
                 index: 0,
+                isTime: this.props.params.time,
             });
+            if (this.props.params.time === 'true') {
+                this.setTime();
+            }
+        });
+    }
+
+    componentWillUnmount() {
+    	this.clearTime();
+    }
+    setTime() {
+    	let time = this.state.time;
+    	this.state.timer = setInterval(() => {
+        time -= 1;
+        this.setState({
+            time,
+        });
+    }, 1000);
+        this.state.timeout = setTimeout(() => {
+			this.clearTime();
+			this.correctAnswer();
+        }, 15000);
+    }
+    clearTime() {
+    	if (this.state.timer !== null) {
+        clearInterval(this.state.timer);
+    }
+    	if (this.state.timeout !== null) {
+        clearTimeout(this.state.timeout);
+    }
+        this.setState({
+            time: 15,
         });
     }
     onChangeChoose = e => {
-    	this.setState({
-        choose: e.target.value,
-    });
+        this.setState({
+            choose: e.target.value,
+        });
     };
     correctAnswer = () => {
+        this.clearTime();
         const questions = this.state.questions;
         const index = this.state.index;
         this.ChargeModal.show(this.state.choose === questions[index].answer, questions[index].explains);
     };
     handleNext = () => {
-		const questions = this.state.questions;
-		const index = this.state.index;
-		let score = this.state.score;
-		score = this.state.choose === questions[index].answer ? score + 1 : score;
-		this.setState({
-			score,
-			choose: '',
-			index: index + 1,
-		});
-	};
+        const questions = this.state.questions;
+        const index = this.state.index;
+        let score = this.state.score;
+        score = this.state.choose === questions[index].answer ? score + 1 : score;
+        this.setState({
+            score,
+            choose: '',
+            index: index + 1,
+        });
+        this.setTime();
+    };
     handleRetest = () => {
         const _this = this;
         confirm({
@@ -62,7 +100,8 @@ export default class TestPage extends React.Component {
                     score: 0,
                 });
             },
-            onCancel() {},
+            onCancel() {
+            },
         });
     };
     goBackIndex = () => {
@@ -72,19 +111,26 @@ export default class TestPage extends React.Component {
             onOk() {
                 hashHistory.push('/');
             },
-            onCancel() {},
+            onCancel() {
+            },
         });
     };
+
     render() {
-    	const questions = this.state.questions;
+        const questions = this.state.questions;
         const index = this.state.index;
-    	const question = questions[index];
+        const question = questions[index];
         const radioStyle = {
             display: 'block',
         };
-        return (<div className="testPage" >
-            <button className="yellowBtn" onClick={this.goBackIndex}>返回首页</button>
-			<p>{this.state.score}分</p>
+        return (<div className="testPage">
+            <div className="flex_row_around flex_vertical_middle">
+                <button className="yellowBtn" onClick={this.goBackIndex}>返回首页</button>
+				<p><span style={{fontSize: '30px', color: 'red'}}>{this.state.score}</span>分</p>
+                {
+					this.state.timer ? <p>倒计时：{this.state.time}秒</p> : null
+				}
+            </div>
             {
 				questions.length === 0 ? null : <div className="questionItem">
     <p className="questionNo">{`第${index + 1}题`}</p>
@@ -98,15 +144,17 @@ export default class TestPage extends React.Component {
         <Radio style={radioStyle} value="3">{`C.${question.item3}`}</Radio>
         <Radio style={radioStyle} value="4">{`D.${question.item4}`}</Radio>
     </RadioGroup>
-					</div>
+				</div>
 			}
             <div className="bottomBtn">
                 <button className="blueBtn" onClick={this.correctAnswer}>下一题</button>
                 <button className="grayBtn" onClick={this.handleRetest}>重新测试</button>
             </div>
             <ChargeModal
-				onNext={this.handleNext}
-                ref={com => { this.ChargeModal = com; }}
+                onNext={this.handleNext}
+                ref={com => {
+                    this.ChargeModal = com;
+                }}
             />
         </div>);
     }

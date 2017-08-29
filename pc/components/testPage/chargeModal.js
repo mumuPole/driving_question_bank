@@ -53,11 +53,15 @@ export default class ChargeModal extends React.Component {
                 <span>知道了</span></button>}
             wrapClassName="chargeModal"
         >
-            {
-				this.state.judgeStatus ? <Icon type="check-circle" className="success" style={{ fontSize: '20px' }} /> :
-					<Icon type="close-circle" className="error" style={{ fontSize: '20px' }} />
-			}
-            <p>{this.state.explain}</p>
+			<div className="flex_row_start">
+				{
+					this.state.judgeStatus ? <Icon type="check-circle" className="success" style={{ fontSize: '20px' }} /> :
+						<Icon type="close-circle" className="error" style={{ fontSize: '20px' }} />
+				}
+				<div className="content">
+					<p>{this.state.explain}</p>
+				</div>
+			</div>
             倒计时：{this.state.time}秒后关闭
         </Modal>);
     }
