@@ -14,7 +14,7 @@ const main = () => {
     ReactDOM.render((<Router history={hashHistory}>
         <Route path="/" component={App}>
             <IndexRoute component={IndexComponent} />
-            <Route path={`${PATH.testPage}/:type/:subject/(:modal)`} component={TestPage} />
+            <Route path={`${PATH.testPage}/:type/:subject/:modal/:isTime`} component={TestPage} />
         </Route>
     </Router>), document.getElementById('root'),
     );

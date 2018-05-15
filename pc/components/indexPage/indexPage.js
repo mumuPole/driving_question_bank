@@ -16,7 +16,7 @@ export default class IndexComponent extends React.Component {
             subject: 1,
             modal: 'c1',
             type: 'rand',
-            time: false,
+            time: 0,
         };
     }
 
@@ -72,8 +72,8 @@ export default class IndexComponent extends React.Component {
             <div className="time">
                 <p>是否计时：</p>
                 <RadioGroup onChange={this.onChangeTime} value={this.state.time}>
-                    <Radio value>是</Radio>
-                    <Radio value={false}>否</Radio>
+                    <Radio value={1}>是</Radio>
+                    <Radio value={0}>否</Radio>
                 </RadioGroup>
             </div>
             <div className="message flex_row_start">
@@ -92,7 +92,7 @@ export default class IndexComponent extends React.Component {
                     2.科目四不需要选择驾照类型
                 </p>
             </div>
-            <Link to={`${PATH.testPage}/${this.state.type}/${this.state.subject}/${this.state.modal}`}><button className="startTest blueBtn">开始测试</button></Link>
+            <Link to={`${PATH.testPage}/${this.state.type}/${this.state.subject}/${this.state.modal}/${this.state.time}`}><button className="startTest blueBtn">开始测试</button></Link>
         </div>);
     }
 }
