@@ -16,35 +16,23 @@ export default class IndexComponent extends React.Component {
             subject: 1,
             modal: 'c1',
             type: 'rand',
-            time: 0,
+            time: false,
         };
     }
 
-    handleState = (name, value) => {
+    handleState = (name, e) => {
+        const value = e.target ? e.target.value : e;
         this.setState({
             [name]: value,
         });
     };
-    onChangeSubject = e => {
-        this.handleState('subject', e.target.value);
-    };
-    onChangeModal = e => {
-        this.handleState('modal', e.target.value);
-    };
-    onChangeType = e => {
-        this.handleState('type', e.target.value);
-    };
-    onChangeTime = e => {
-        this.handleState('time', e.target.value);
-    };
-
     render() {
         return (<div className="indexPage">
             <h1>驾考宝典</h1>
             <img alt="" src="image/index.jpg" />
             <div className="subject">
                 <p>科目选择：</p>
-                <RadioGroup onChange={this.onChangeSubject} value={this.state.subject}>
+                <RadioGroup onChange={args => this.handleState('subject', args)} value={this.state.subject}>
                     <Radio value={1}>科目一</Radio>
                     <Radio value={4}>科目四</Radio>
                 </RadioGroup>
@@ -52,7 +40,7 @@ export default class IndexComponent extends React.Component {
             {
                 this.state.subject === 1 ? <div className="modal">
                     <p>驾照类型：</p>
-                    <RadioGroup onChange={this.onChangeModal} value={this.state.modal}>
+                    <RadioGroup onChange={args => this.handleState('modal', args)} value={this.state.modal}>
                         <Radio value={'c1'}>c1</Radio>
                         <Radio value={'c2'}>c2</Radio>
                         <Radio value={'a1'}>a1</Radio>
@@ -64,14 +52,14 @@ export default class IndexComponent extends React.Component {
             }
             <div className="type">
                 <p>测试类型：</p>
-                <RadioGroup onChange={this.onChangeType} value={this.state.type}>
+                <RadioGroup onChange={args => this.handleState('type', args)} value={this.state.type}>
                     <Radio value={'rand'}>随机测试</Radio>
                     <Radio value={'order'}>顺序测试</Radio>
                 </RadioGroup>
             </div>
             <div className="time">
                 <p>是否计时：</p>
-                <RadioGroup onChange={this.onChangeTime} value={this.state.time}>
+                <RadioGroup onChange={args => this.handleState('time', args)} value={this.state.time}>
                     <Radio value={1}>是</Radio>
                     <Radio value={0}>否</Radio>
                 </RadioGroup>
